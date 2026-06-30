@@ -85,7 +85,7 @@ Oracle Scheduler automates all system workflows:
 | `COUPON_NUMBERS` | Numbers assigned to coupons |
 | `RESULTS` | Official draw results |
 | `ROLLOVERS` | Jackpot rollover history |
-| `TOP_WINNERS` | Jackpot and high-tier winning coupons |
+| `TOP_WINNERS` | Jackpot winning coupons |
 
 ### Archive Tables
 

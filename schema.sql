@@ -17,7 +17,8 @@ GRANT CREATE EVALUATION CONTEXT TO LOTTO;
 GRANT EXECUTE ON DBMS_SCHEDULER TO LOTTO;
 GRANT MANAGE SCHEDULER TO LOTTO;
 
-
+-- ALTER USER LOTTO QUOTA UNLIMITED ON USERS;
+-- GRANT CREATE VIEW TO LOTTO;
 */
 	--------------------------------------------------
 	-- SEQUENCES
@@ -154,9 +155,7 @@ CREATE INDEX results_game_draw_at_ix
 
 CREATE INDEX coupon_numbers_coupon_id_ix
 	ON coupon_numbers (coupon_id);	
-	
-CREATE INDEX top_winners_coupon_id_ix
-    ON top_winners (coupon_id);
+
 	
 	--------------------------------------------------
 	-- COMMENTS

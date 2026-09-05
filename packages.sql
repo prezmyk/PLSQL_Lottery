@@ -301,23 +301,23 @@ CREATE OR REPLACE PACKAGE BODY lotto_pkg IS
 			FROM top_winners tw
 			WHERE tw.coupon_id = cn.coupon_id
 		);
-
+		
 		DELETE FROM coupons c
-		WHERE NOT EXISTS (
-			SELECT 1
-			FROM top_winners tw
+		WHERE c.coupon_at < TRUNC(SYSTIMESTAMP, 'MM')
+		AND NOT EXISTS (
+			SELECT 1 FROM top_winners tw 
 			WHERE tw.coupon_id = c.coupon_id
 		);
-
+		
 		DELETE FROM results r
-		WHERE NOT EXISTS (
-			SELECT 1
-			FROM coupons c
-			JOIN top_winners tw
-			ON tw.coupon_id = c.coupon_id
+		WHERE r.draw_at < TRUNC(SYSTIMESTAMP, 'MM')  
+		AND NOT EXISTS (
+			SELECT 1 FROM coupons c
+			JOIN top_winners tw ON tw.coupon_id = c.coupon_id
 			WHERE c.game_id = r.game_id
 			AND c.coupon_at BETWEEN r.draw_at - INTERVAL '1' DAY AND r.draw_at
 		);
+
 		
 		DELETE FROM guest_coupon_limits 
 		WHERE request_date != TRUNC(SYSDATE);

@@ -22,8 +22,7 @@ LEFT JOIN top_winners tw
 	ON mw.coupon_id=tw.coupon_id
 LEFT JOIN prize_rules pr
 	ON pr.game_id = mw.game_id
-	AND pr.matched_numbers = mw.matched_numbers
-ORDER BY mw.draw_at DESC, mw.coupon_id ASC, mw.matched_numbers DESC;
+	AND pr.matched_numbers = mw.matched_numbers;
 
 
 CREATE OR REPLACE VIEW winning_numbers AS 
@@ -38,8 +37,7 @@ FROM
   FROM results )
 PIVOT (
   MAX ( drawn_number )FOR rn IN ( 1 no_1, 2 no_2, 3 no_3, 4 no_4, 5 no_5, 6 no_6 )
-  )
- ORDER BY draw_at, game_id;
+  );
  
 
 	--------------------------------------------------

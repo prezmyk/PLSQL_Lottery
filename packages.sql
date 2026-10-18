@@ -293,6 +293,7 @@ CREATE OR REPLACE PACKAGE BODY lotto_pkg IS
 	-- Monthly Clean Data
 	PROCEDURE clean_mon_data
 	IS
+		v_now results.draw_at%TYPE;
 	BEGIN
 		
 		DELETE FROM coupon_numbers cn
@@ -300,17 +301,23 @@ CREATE OR REPLACE PACKAGE BODY lotto_pkg IS
 			SELECT 1
 			FROM top_winners tw
 			WHERE tw.coupon_id = cn.coupon_id
+		)
+		AND EXISTS (
+			SELECT 1 
+			FROM coupons c 
+			WHERE c.coupon_id = cn.coupon_id
+			AND c.coupon_at < TRUNC(v_now, 'MM')
 		);
 		
 		DELETE FROM coupons c
-		WHERE c.coupon_at < TRUNC(SYSTIMESTAMP, 'MM')
+		WHERE c.coupon_at < TRUNC(v_now, 'MM')
 		AND NOT EXISTS (
 			SELECT 1 FROM top_winners tw 
 			WHERE tw.coupon_id = c.coupon_id
 		);
 		
 		DELETE FROM results r
-		WHERE r.draw_at < TRUNC(SYSTIMESTAMP, 'MM')  
+		WHERE r.draw_at < TRUNC(v_now, 'MM')  
 		AND NOT EXISTS (
 			SELECT 1 FROM coupons c
 			JOIN top_winners tw ON tw.coupon_id = c.coupon_id
@@ -320,7 +327,7 @@ CREATE OR REPLACE PACKAGE BODY lotto_pkg IS
 
 		
 		DELETE FROM guest_coupon_limits 
-		WHERE request_date != TRUNC(SYSDATE);
+		WHERE request_date != TRUNC(v_now);
 		
 	END;
 	
